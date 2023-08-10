@@ -10,15 +10,16 @@ namespace HW30
 {
     public class ImageDownloader
     {
+		WebClient? client;
         public async Task Download(string remoteUri, string fileName)
         {
 			// Качаем картинку в текущую директорию
-			var myWebClient = new WebClient();
-			DownloadEventArgs downloadEventArgs = new DownloadEventArgs(remoteUri, fileName);
+			client = new WebClient();
+			//DownloadEventArgs downloadEventArgs = new DownloadEventArgs(remoteUri, fileName);
 			//if (DownloadStarted != null)
 			//	DownloadStarted(this, downloadEventArgs);
 			Task.Delay(8000).Wait();
-			await myWebClient.DownloadFileTaskAsync(remoteUri, fileName);
+			await client.DownloadFileTaskAsync(remoteUri, fileName);
 			//if(DownloadCompleted != null)
 			//	DownloadCompleted(this, downloadEventArgs);
 			

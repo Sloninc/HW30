@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 namespace HW30
 {
     public class Program
@@ -54,6 +55,7 @@ namespace HW30
                     Task.Delay(10000).Wait();
                     if (token.IsCancellationRequested)  // проверяем наличие сигнала отмены задачи
                     {
+                        //imageDownloader.Interrupt();
                         Console.WriteLine($"Скачивание "+image+" прервано");
                         return;     //  выходим из метода и тем самым завершаем задачу
                     }
@@ -87,6 +89,7 @@ namespace HW30
             }
             Console.ReadLine();
         }
+
         private static void ImageDownloader_DownloadCompleted(object? sender, DownloadEventArgs e)
         {
             Console.WriteLine("Успешно скачал \"{0}\" из \"{1}\"", e.FileName, e.RemoteUri);
