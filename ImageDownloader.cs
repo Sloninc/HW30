@@ -15,11 +15,12 @@ namespace HW30
 			// Качаем картинку в текущую директорию
 			var myWebClient = new WebClient();
 			DownloadEventArgs downloadEventArgs = new DownloadEventArgs(remoteUri, fileName);
-			if (DownloadStarted != null)
-				DownloadStarted(this, downloadEventArgs);
+			//if (DownloadStarted != null)
+			//	DownloadStarted(this, downloadEventArgs);
+			Task.Delay(8000).Wait();
 			await myWebClient.DownloadFileTaskAsync(remoteUri, fileName);
-			if(DownloadCompleted != null)
-				DownloadCompleted(this, downloadEventArgs);
+			//if(DownloadCompleted != null)
+			//	DownloadCompleted(this, downloadEventArgs);
 			
 		}
 		public event EventHandler<DownloadEventArgs>? DownloadCompleted;
