@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using System.IO;
 namespace HW30_5
 {
     public class Program
@@ -25,27 +26,14 @@ namespace HW30_5
             {
                 string image = $"bigimage_#{i + 1}.jpg";
                 string uri = remoteUri[i];
-                WebClient webClient = new WebClient();
-                tasks[i] = Task.Run(() =>
+                using (WebClient webClient = new WebClient())
                 {
-                    webClient.DownloadFileTaskAsync(uri, image);
-                    //if (token.IsCancellationRequested)  // проверяем наличие сигнала отмены задачи
-                    //{
-                    //    Console.WriteLine($"Скачивание " + image + " прервано");
-                    //    webClient.CancelAsync();
-                    //    return;     //  выходим из метода и тем самым завершаем задачу
-                    //}
-                    while (webClient.IsBusy)
-                    {
-                        if (token.IsCancellationRequested)  // проверяем наличие сигнала отмены задачи
-                        {
-                            Console.WriteLine($"Скачивание " + image + " прервано");
-                            webClient.CancelAsync();
-                            return;     //  выходим из метода и тем самым завершаем задачу
-                        }
-                    }
-                }, token);
-
+                    tasks[i] = Task.Run(async () => 
+                    { 
+                        token.Register(() => webClient.CancelAsync()); 
+                        await webClient.DownloadFileTaskAsync(uri, image); 
+                    }, token);
+                }
             }
             while (true)
             {
@@ -56,13 +44,33 @@ namespace HW30_5
                     Console.Clear();
                     cancelTokenSource.Cancel();
                     cancelTokenSource.Dispose();
+                    Console.WriteLine("Операция прервана.");
+                    Task.Delay(2000).Wait();
+                    for (int i = 0; i < 10; i++)
+                    {
+                        try
+                        {
+                            File.Delete($"bigimage_#{i + 1}.jpg");
+                        }
+                        catch (IOException)
+                        {
+                            while (true)
+                            {
+                                if (tasks[i].IsCanceled)
+                                {
+                                    File.Delete($"bigimage_#{i + 1}.jpg");
+                                    break;
+                                }
+                            }
+                        }
+                    }
                     break;
                 }
                 else
                 {
                     Console.Clear();
                     for (int i = 0; i < tasks.Length; i++)
-                    {
+                    { 
                         if (tasks[i].IsCompleted)
                             Console.WriteLine($"состояние загрузки картинки bigimage_#{i + 1}.jpg - загружено");
                         else Console.WriteLine($"состояние загрузки картинки bigimage_#{i + 1}.jpg - загружается");
