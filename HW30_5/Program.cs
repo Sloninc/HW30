@@ -37,7 +37,8 @@ namespace HW30_5
             }
             while (true)
             {
-                Console.WriteLine("Нажмите клавишу A для остановки скачивания или любую другую клавишу для проверки статусов скачивания");
+                Console.WriteLine("Нажмите клавишу A для остановки скачивания или " +
+                    "любую другую клавишу для проверки статусов скачивания");
                 ConsoleKeyInfo consoleKey = Console.ReadKey();
                 if (consoleKey.KeyChar == 'a')
                 {

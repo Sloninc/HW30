@@ -11,22 +11,9 @@ namespace HW30_1_3
             ImageDownloader imageDownloader = new ImageDownloader();
             imageDownloader.DownloadStarted += ImageDownloader_DownloadStarted;
             imageDownloader.DownloadCompleted += ImageDownloader_DownloadCompleted;
-            Task task = Task.Run(() => imageDownloader.Download(remoteUri, fileName));
-            while (true)
-            {
-                Console.WriteLine("Нажмите клавишу A для выхода или любую другую клавишу для проверки статуса скачивания");
-                ConsoleKeyInfo consoleKey = Console.ReadKey();
-                if (consoleKey.KeyChar == 'a')
-                    Environment.Exit(0);
-                else
-                {
-                    Console.Clear();
-                    if (task.IsCompleted)
-                        Console.WriteLine("состояние загрузки картинки - загружено");
-                    else Console.WriteLine("состояние загрузки картинки - загружается");
-                    Console.WriteLine(Environment.NewLine);
-                }
-            }
+            imageDownloader.Download(remoteUri, fileName);
+            Console.WriteLine("Нажмите любую кнопку для выхода.");
+            ConsoleKeyInfo consoleKey = Console.ReadKey();
         }
 
         private static void ImageDownloader_DownloadCompleted(object? sender, DownloadEventArgs e)
