@@ -2,6 +2,9 @@
 using System.IO;
 namespace HW30_1_3
 {
+    /// <summary>
+    /// 1-3 пункты домашнего задания.
+    /// </summary>
     public class Program
     {
         static void Main()
@@ -16,12 +19,20 @@ namespace HW30_1_3
             Console.WriteLine("Нажмите любую кнопку для выхода.");
             ConsoleKeyInfo consoleKey = Console.ReadKey();
         }
-
+        /// <summary>
+        /// Метод для обработки события окончания загрузки.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void ImageDownloader_DownloadCompleted(object? sender, DownloadEventArgs e)
         {
             Console.WriteLine("Успешно скачал \"{0}\" из \"{1}\"", e.FileName, e.RemoteUri);
         }
-
+        /// <summary>
+        /// Метод для обработки события начала загрузки.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private static void ImageDownloader_DownloadStarted(object? sender, DownloadEventArgs e)
         {
             Console.WriteLine("Качаю \"{0}\" из \"{1}\" .......\n\n", e.FileName, e.RemoteUri);

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Net;
 namespace HW30_4
 {
+    /// <summary>
+    /// Класс для асинхронного запуска скачивания картинки.
+    /// </summary>
     public class ImageDownloader
     {
         public async Task Download(string remoteUri, string fileName)

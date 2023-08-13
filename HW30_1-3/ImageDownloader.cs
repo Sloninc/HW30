@@ -8,6 +8,9 @@ using System.Net;
 
 namespace HW30_1_3
 {
+    /// <summary>
+    /// Класс для синхронного запуска скачивания картинки уведомления об этом.
+    /// </summary>
     public class ImageDownloader
     {
         public void Download(string remoteUri, string fileName)

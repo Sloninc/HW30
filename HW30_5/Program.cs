@@ -1,11 +1,14 @@
 ﻿using System.Net;
 using System.IO;
 namespace HW30_5
-{
+{/// <summary>
+/// 5й пункт домашнего задания.
+/// </summary>
     public class Program
     {
         static async Task Main()
         {
+            //Ссылки на 10 картинок 8К
             string[] remoteUri =
             {
                 "https://img3.wallspic.com/crops/4/2/2/3/7/173224/173224-sunset-blue-cloud-water-water_resources-7680x4320.jpg",
@@ -26,6 +29,8 @@ namespace HW30_5
             {
                 string image = $"bigimage_#{i + 1}.jpg";
                 string uri = remoteUri[i];
+                //так как WebClient не поддерживает CancellationToken,
+                //то используем token.Register(() => webClient.CancelAsync()) для отмены загрузки.
                 using (WebClient webClient = new WebClient())
                 {
                     tasks[i] = Task.Run(async () => 
@@ -46,12 +51,15 @@ namespace HW30_5
                     cancelTokenSource.Cancel();
                     cancelTokenSource.Dispose();
                     Console.WriteLine("Операция прервана.");
+                    //ожидаем 2 секунды, пока отработают CancellationToken
                     Task.Delay(2000).Wait();
+                    //Следующий блок кода оптимально завершает процесс и удаляет ресурсы в случае отмены.
                     for (int i = 0; i < 10; i++)
                     {
                         try
                         {
-                            File.Delete($"bigimage_#{i + 1}.jpg");
+                            if(File.Exists(Directory.GetCurrentDirectory()+$"\\bigimage_#{i + 1}.jpg"))
+                                File.Delete($"bigimage_#{i + 1}.jpg");
                         }
                         catch (IOException)
                         {
@@ -70,6 +78,7 @@ namespace HW30_5
                 else
                 {
                     Console.Clear();
+                    //Вывод информации о состоянии загрузки каждой картинки.
                     for (int i = 0; i < tasks.Length; i++)
                     { 
                         if (tasks[i].IsCompleted)
